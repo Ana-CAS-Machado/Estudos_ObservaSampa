@@ -181,7 +181,7 @@ for ojs in "${ojsVersions[@]}"; do
 							"versions/$ojsNum/$os/$server/$php/docker-compose-local.yml"
 
 						# Setting a link with a non versioned folder with the last avaliable php version
-	                    if [[ -d "versions/$ojsNum/$os/$server/php" ]]; then
+						if [[ -d "versions/$ojsNum/$os/$server/php" ]]; then
 							unlink "versions/$ojsNum/$os/$server/php"
 						fi
 						ln -s "$php" "versions/$ojsNum/$os/$server/php"
