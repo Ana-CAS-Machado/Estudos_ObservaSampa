@@ -4,7 +4,7 @@
 # Call example:
 # $ docker-compose up
 
-version: "3.6"
+version: "3.7"
 
 networks:
   inside:
@@ -47,7 +47,7 @@ services:
 #      # WARNING: You can only enable file-volumes if file exists in the container.
 #      - ./volumes/config/ojs.config.inc.php:/var/www/html/config.inc.php
 #      - ./volumes/config/apache.htaccess:/var/www/html/.htaccess
-#      - ./volumes/php.custom.ini:/etc/php7/php.custom.ini
+#      - ./volumes/php.custom.ini:/etc/php8/php.custom.ini
 
     networks:
       - inside

@@ -67,7 +67,7 @@ webServers=(  'apache' )
 # webServers=(  'apache' 'nginx' )
 
 # All PHP versions:
-phpVersions=( 'php5' 'php70' 'php73' 'php74' )
+phpVersions=( 'php5' 'php70' 'php73' 'php74' 'php81')
 # phpVersions=( 'php5' 'php70' 'php73' )
 
 # PHP support for each ojs version:
@@ -75,6 +75,7 @@ mapfile -t php5  < ./platforms/php5.list
 mapfile -t php70 < ./platforms/php70.list
 mapfile -t php73 < ./platforms/php73.list
 mapfile -t php74 < ./platforms/php74.list
+mapfile -t php81 < ./platforms/php81.list
 
 printf "\n\nBUILDING OJS OFFICIAL DOCKER STACKS\n"
 printf "===================================\n\n"
@@ -109,6 +110,9 @@ for ojs in "${ojsVersions[@]}"; do
 					;;
 					php74 )
 					    [[ " ${php74[@]} " =~ " ${ojs} " ]] && build=1
+					;;
+					php81 )
+					    [[ " ${php81[@]} " =~ " ${ojs} " ]] && build=1
 					;;
 				esac
 
