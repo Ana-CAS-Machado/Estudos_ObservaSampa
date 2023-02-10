@@ -86,23 +86,28 @@ RUN set -xe \
 	&& apk add --no-cache --virtual .build-deps $BUILDERS \
 	&& apk add --no-cache $PACKAGES \
 	&& apk add --no-cache $PHP_EXTENSIONS \
+        && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/community/ gnu-libiconv=1.15-r2 \
 # Building OJS:
-	# Configure and download code from git
+      # Configure and download code from git
 	&& git config --global url.https://.insteadOf git:// \
 	&& git config --global advice.detachedHead false \
 	&& git clone --depth 1 --single-branch --branch $OJS_VERSION --progress https://github.com/pkp/ojs.git . \
 	&& git submodule update --init --recursive >/dev/null \
-	# Composer vudu:
+      # Composer vudu:
  	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar \
 	# To avoid timeouts with gitHub we use tokens:
 	# TODO: Replace personal token by an official one.
- 	# && composer.phar config -g github-oauth.github.com 58778f1c172c09f3add6cb559cbadd55de967d47 \
-	# Install Composer Deps:
- 	&& composer.phar --working-dir=lib/pkp install --no-dev \
- 	&& composer.phar --working-dir=plugins/paymethod/paypal install --no-dev \
-	&& composer.phar --working-dir=plugins/generic/citationStyleLanguage install --no-dev \
-	# Node joins to the party:
-	&& npm install -y && npm run build \
+ 	# && composer.phar config -g github-oauth.github.com <yourAPIkeyHere> \
+      # Install Composer Deps:
+	&& for i in $(find . -name composer.json); do \
+	   COMPOSERWD=$(echo $i | sed 's/composer.json//'); \
+	   echo -n " - $COMPOSERWD ... "; \
+	   composer.phar --working-dir=$COMPOSERWD install --no-dev; \
+	   echo "Done"; \
+	done \
+      # Node joins to the party:
+	&& npm ci -y \
+        && NODE_OPTIONS=--openssl-legacy-provider npm run build \
 # Create directories
  	&& mkdir -p /var/www/files /run/apache2  \
 	&& cp config.TEMPLATE.inc.php config.inc.php \
